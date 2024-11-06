@@ -1,11 +1,6 @@
 package web.service;
 
-import lombok.extern.flogger.Flogger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,14 +26,6 @@ public class UserServiceImpl {
         this.roleRep = roleRep;
         this.passwordEncoder = passwordEncoder;
     }
-    public User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            return (User) authentication.getPrincipal(); // или другой способ получения пользователя
-        }
-        return null; // Либо выбросьте исключение, если пользователь не найден
-    }
-
 
     public void createAdmin(User user) {
         String rawPassword = user.getPassword();
@@ -83,6 +70,9 @@ public class UserServiceImpl {
     }
 
     public void updateUser(User user) {
+        String rawPassword = user.getPassword();
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        user.setPassword(encodedPassword);
         userRep.save(user);
     }
 }
