@@ -1,6 +1,7 @@
 package web.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,11 +10,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import web.model.Role;
 import web.model.User;
 import web.service.RoleServiceImpl;
 import web.service.UserServiceImpl;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,8 +54,11 @@ public class AdminRestController {
     }
 
 
-    @PostMapping(value = "/admin/new")
-    public ResponseEntity<?> addUser(@RequestBody User user, @RequestParam String roleIds) {
+    @PostMapping(value = "/admin/new", consumes = "multipart/form-data")
+    public ResponseEntity<?> addUser(
+            @RequestParam("roleIds") String roleIds,   // Роли как строка
+            @ModelAttribute User user)
+    {
         List<Role> roles = Arrays.stream(roleIds.split(","))
                 .map(String::trim)
                 .map(Long::parseLong)
@@ -62,11 +68,12 @@ public class AdminRestController {
         user.setRoles(roles);
 
         userService.createUser(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+
+        return ResponseEntity.status(201).body("User created successfully");
     }
 
     // Обновление пользователя
-    @PostMapping("/admin/edit/{id}")
+    @PutMapping("/admin/edit/{id}")
     public ResponseEntity<User> updateUser(@ModelAttribute User user, @RequestParam String roleIds) {
         List<Role> roles = Arrays.stream(roleIds.split(","))
                 .map(String::trim)
@@ -81,7 +88,7 @@ public class AdminRestController {
     }
 
     // Удаление пользователя
-    @GetMapping("/admin/delete/{id}")
+    @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK); // Обратите внимание на путь
