@@ -7,7 +7,6 @@ import web.model.Role;
 import web.repositories.RoleRep;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RoleServiceImpl implements RoleService{

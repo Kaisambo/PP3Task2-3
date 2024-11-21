@@ -62,7 +62,7 @@ public class AdminController {
     public String addUser(@ModelAttribute User user, @RequestParam String roleIds) {
         List<Role> roles = Arrays.stream(roleIds.split(","))
                 .map(String::trim)
-                .map(Long::parseLong) // Преобразуем строку в long blyat
+                .map(Long::parseLong)
                 .map(roleService::getRoleById) // Получаем роль из базы данных
                 .collect(Collectors.toList());
 
@@ -100,7 +100,7 @@ public class AdminController {
     public String updateUser(@PathVariable Integer id, @ModelAttribute User user, @RequestParam String roleIds) {
         List<Role> roles = Arrays.stream(roleIds.split(","))
                 .map(String::trim)
-                .map(Long::parseLong) // Преобразуем строку в long blyat
+                .map(Long::parseLong)
                 .map(roleService::getRoleById) // Получаем роль из базы данных
                 .collect(Collectors.toList());
 
