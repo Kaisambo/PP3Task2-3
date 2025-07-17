@@ -70,7 +70,7 @@
 </head>
 <body>
 <h2>Edit User</h2>
-<form th:action="@{/users/edit/{id}(id=${user.id})}" method="post">
+<form th:action="@{/admin/edit/{id}(id=${user.id})}" method="post">
     <div>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" th:value="${user.username}" required>

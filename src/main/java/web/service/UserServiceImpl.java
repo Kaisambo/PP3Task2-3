@@ -31,7 +31,6 @@ public class UserServiceImpl {
         this.roleRep = roleRep;
         this.passwordEncoder = passwordEncoder;
     }
-
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
