@@ -23,7 +23,7 @@ pipeline {
             }
         }
 
-        // 3. Копирование JAR файла в папку Open Server
+
         stage('Copy to Open Server') {
             steps {
                 bat """
